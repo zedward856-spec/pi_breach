@@ -195,18 +195,23 @@ class BreachProtocol(Gtk.Window):
         self.init_game_state()
         self.set_focus(None)
         
-    def init_game_state(self):
-        self.grid_size = random.choice([3, 4, 5])
-        
-        if self.grid_size == 3:
-            self.max_time = 15.0
-        elif self.grid_size == 4:
-            self.max_time = 20.0
-        else:
-            self.max_time = 25.0
+    def init_game_state(self, keep_difficulty=False):
+        if not keep_difficulty:
+            old_size = getattr(self, 'grid_size', None)
+            sizes = [3, 4, 5]
+            if old_size in sizes and len(sizes) > 1:
+                sizes.remove(old_size)
+            self.grid_size = random.choice(sizes)
             
-        self.target_size = random.randint(4, 6)
-        self.buffer_size = self.target_size
+            if self.grid_size == 3:
+                self.max_time = 15.0
+            elif self.grid_size == 4:
+                self.max_time = 20.0
+            else:
+                self.max_time = 25.0
+                
+            self.target_size = random.randint(4, 6)
+            self.buffer_size = self.target_size
         
         self.matrix = [[random.choice(HEX_CODES) for _ in range(self.grid_size)] for _ in range(self.grid_size)]
         self.buffer = []
@@ -1009,7 +1014,10 @@ class BreachProtocol(Gtk.Window):
         return False
 
     def on_restart(self, widget):
-        self.init_game_state()
+        keep = False
+        if getattr(self, 'game_over', False) and self.status_label.get_text() == "Hack Failed":
+            keep = True
+        self.init_game_state(keep_difficulty=keep)
         self.set_focus(None)
 
 win = BreachProtocol()
