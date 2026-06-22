@@ -1,7 +1,5 @@
 # Breach Protocol (Cyberpunk 2077 Minigame)
 
-![Screenshot](screenshot.jpg)
-
 A fully playable Python/GTK3 recreation of the **Breach Protocol** hacking minigame from *Cyberpunk 2077*. This application was designed specifically for the Raspberry Pi environment but works on any system supporting PyGObject (GTK3).
 
 ## Features
